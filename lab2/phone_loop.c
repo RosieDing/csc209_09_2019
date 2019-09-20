@@ -6,9 +6,8 @@ int main(){
 	scanf("%s", phone);
 	int index = 0;
 	int error_ms = 0;
-
-	while(index != EOF){
-		scanf("%d", &index);
+	int retval = 0;
+	while((retval=scanf("%d", &index))!= EOF){
 		if(index >= 0 && index <= 9){
 			printf("%c\n", phone[index]);
 		}else if(index == -1){
@@ -20,11 +19,6 @@ int main(){
 		}
 	}
 
-	if(error_ms == 0){
-		printf("%d\n",error_ms);
-		return 0;
-	}
-	printf("%d\n",error_ms);
-	return 1;
+	return error_ms;
 	
 }
