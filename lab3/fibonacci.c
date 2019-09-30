@@ -16,6 +16,24 @@
 
 /* Write your solution here */
 
+void fib(int** sequence, int size){
+	*sequence = malloc(size * sizeof(int));
+	if(size == 0){
+		return;
+	}
+	if(size >= 1){
+		(*sequence)[0] = 0;
+	}
+	if(size >= 2){
+		(*sequence)[1] = 1;
+	}
+	if (size >= 3){
+		for(int i = 2; i < size; i++){
+			(*sequence)[i] = (*sequence)[i-1] + (*sequence)[i-2];
+		}
+	}
+	return;
+}
 
 int main(int argc, char **argv) {
     /* do not change this main function */
