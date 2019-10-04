@@ -38,8 +38,23 @@ int main(int argc, char **argv) {
     char *name = argv[2];
 
     // Your code goes here
+    char *greet_raw = argv[1];
+    int empty = 20 - strlen(greet_raw);
 
+    
+    strncpy(greeting, greet_raw, 19);
+    greeting[19]= '\0';
+    empty -= 1;
+    
+    if(empty > 1){
+        strncat(greeting," ", 1);
+        empty -= 1;
+    }
 
+    if(empty > 0){
+        strncat(greeting, name, empty);
+    }
+    
     printf("%s\n", greeting);
     return 0;
 }

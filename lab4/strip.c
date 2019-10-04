@@ -20,6 +20,22 @@
 */
 
 // Write the function strip_q_marks here
+int strip_q_marks(char *input){
+    int length = strlen(input);
+    int num = 0;
+    if(length == 0){
+        return 0;
+    }
+
+    while(input[length - 1]=='?'){
+            input[length-1] = '\0';
+            num ++;
+            length -=1;
+    }
+    return num;
+
+}
+
 
 
 int main(int argc, char **argv) {
