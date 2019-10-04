@@ -46,7 +46,9 @@ int main(int argc, char **argv) {
 
     read_image(num_rows, num_cols, array, file);
 
-    printf("Number of Cells is %d\n", count_cells(num_rows, num_cols, array));
+    int num_cell = count_cells(num_rows, num_cols, array);
+
+    
 
     if(argc == 3){
         char *ms = argv[2];
@@ -54,6 +56,8 @@ int main(int argc, char **argv) {
         print_image(num_rows, num_cols, array);}
     }
 
+    printf("Number of Cells is %d\n",num_cell);
+    
     fclose(file);
     
 
