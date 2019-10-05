@@ -28,7 +28,6 @@ int main(int argc, char **argv) {
     char *file_name = argv[1];
     FILE *file;
 
-    //file = fopen("sample", "r");
     file = fopen(file_name, "r");
 
     if (file == NULL)
@@ -39,7 +38,6 @@ int main(int argc, char **argv) {
     int num_rows, num_cols;
 
     fscanf(file, "%d", &num_rows);
-    
     fscanf(file, "%d", &num_cols);
 
     int array[num_rows][num_cols];
@@ -47,8 +45,6 @@ int main(int argc, char **argv) {
     read_image(num_rows, num_cols, array, file);
 
     int num_cell = count_cells(num_rows, num_cols, array);
-
-    
 
     if(argc == 3){
         char *ms = argv[2];
