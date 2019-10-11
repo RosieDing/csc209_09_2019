@@ -38,6 +38,15 @@ int main(int argc, char **argv) {
     }
 
     // Clean up: you need to do this!
+    int error = fclose(image);
+    if(error != 0){
+        fprintf(stderr, "fclose failed\n");
+        exit(1);
+    }
+    for(int i = 0; i < height; i++){
+        free(pixels[i]);
+    }
+    free(pixels);
 
     return 0;
 }
