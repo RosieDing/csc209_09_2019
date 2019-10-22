@@ -161,6 +161,7 @@ void mem_init(int size) {
 
 
 void mem_clean(){
+
     struct block *next = allocated_list->next;
     
     while(allocated_list != NULL){
@@ -168,9 +169,6 @@ void mem_clean(){
         free(allocated_list);
         allocated_list = next;
     }
-
-   
-    next = freelist->next;
     
     while(freelist != NULL){
         next = freelist->next;
