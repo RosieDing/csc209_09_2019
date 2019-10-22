@@ -13,7 +13,7 @@ struct block *allocated_list;
 
 void *smalloc(unsigned int nbytes) {
 
-    if(nbytes == 0){
+    if(nbytes == 0| freelist == NULL){
         return NULL;
     }
     
@@ -72,7 +72,7 @@ void *smalloc(unsigned int nbytes) {
 
 
 int sfree(void *addr) {
-    if(addr == NULL){//the given address is empty
+    if(addr == NULL | allocated_list == NULL){//the given address is empty
         return -1;
     }
 	struct block *current = allocated_list;
@@ -85,6 +85,7 @@ int sfree(void *addr) {
         current = current->next;
         next = current->next;
     }
+
     if(next == NULL && current->addr!= addr){//cannot find the address
         return -1;
     }
@@ -97,6 +98,13 @@ int sfree(void *addr) {
     }
 
     //step2: add the block into the freelist (free list: increasing address)
+
+    if(freelist == NULL){//if the free list is NULL
+        freelist = current;
+        current->next = NULL;
+        return 0;
+    }
+
     struct block *previous_free = NULL;
     struct block *current_free = freelist;
     struct block *next_free = freelist->next;
@@ -159,24 +167,22 @@ void mem_init(int size) {
     freelist->next = NULL; 
 }
 
+void list_clean(struct block *list){
+    struct block *next = list->next;
+    
+    while(list != NULL){
+        next = list->next;
+        free(list);
+        list = next;
+    }
+}
 
 void mem_clean(){
-
-    struct block *next = allocated_list->next;
-    
-    while(allocated_list != NULL){
-        next = allocated_list->next;
-        free(allocated_list);
-        allocated_list = next;
+    if(allocated_list != NULL){
+        list_clean(allocated_list);
     }
-    
-    while(freelist != NULL){
-        next = freelist->next;
-        free(freelist);
-        freelist = next;
+    if(freelist != NULL){
+        list_clean(freelist);
     }
-
-
-
 }
 

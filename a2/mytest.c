@@ -41,12 +41,17 @@ int main(void) {
     printf("List of free blocks:\n");
     print_free();
 
+    // printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
+     ptrs[4] = smalloc(262072);
+     printf("%p\n", ptrs[4]);
+    write_to_mem(262072,ptrs[4],4);
+    printf("%s\n%p\n", "Add new block: ",ptrs[4]);
 
     // printf("freeing %p result = %d\n", ptrs[1], sfree(ptrs[1]));
-    // printf("List of allocated blocks:\n");
-    // print_allocated();
-    // printf("List of free blocks:\n");
-    // print_free();
+    printf("List of allocated blocks:\n");
+    print_allocated();
+    printf("List of free blocks:\n");
+    print_free();
 
     // printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
     // printf("List of allocated blocks:\n");
