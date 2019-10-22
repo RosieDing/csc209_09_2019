@@ -12,54 +12,50 @@ struct block *freelist;
 struct block *allocated_list;
 
 void *smalloc(unsigned int nbytes) {
+
+    if(nbytes == 0){
+        return NULL;
+    }
     
     if(nbytes % 8 != 0){
         nbytes = nbytes +(8 - (nbytes % 8));
     }
-    //step1: check available empty block in free list
+    //------check available empty block in free list
+    //step 1 : find the first bigger/equal block
     int size = freelist->size;
     struct block *current = freelist;
     struct block *previous = NULL;
     struct block *next = freelist->next;
-    while(next != NULL && size != nbytes){
-        //printf("%s\n", "entering check freelist1");
+
+
+    while(next != NULL && size < nbytes){
         current = current->next;
         previous = current;
         next = current->next;
         size = current->size;
     }
-    //printf("%s\n", "out check freelist1");
 
-    //Case 1: find the empty fitting block available for new block
-    if (current->size == nbytes){
-       // printf("%s\n", "entering same length");
+    //Case 1: find the empty fitting block size equal to new block
+    if (size == nbytes){
         //remove the block from freelist
-        previous->next = next;
+        if(previous == NULL){
+            freelist = next;
+        }else{
+        previous->next = next;}
+
         //add it to the front of allocated_list
         current->next = allocated_list;
         allocated_list = current;
+        printf("%p\n", freelist);
+
         return allocated_list->addr;
     }
 
-    //Case 2: no empty block has the fitted size
-    //step a: find the first bigger block
-    current = freelist;
-    previous = NULL;
-    next = freelist->next;
-
-    while(next != NULL && size < nbytes){
-        // printf("%s\n", "entering check freelist2");
-        current = current->next;
-        previous = current;
-        next = current->next;
-        size = current->size;
-    }
-
-    //found the block which could be splited
+    //Case 2: found the block which could be splited(first bigger block)
     if(size > nbytes){
-        //printf("%s\n", "entering create new");
         current->size = size - nbytes;
         //create a new block and add to the front of all_list
+        //under this condition, we don't to reallocate the block 
         struct block *new_block = malloc(sizeof(struct block));
 
         new_block->addr = current->addr;
@@ -67,8 +63,6 @@ void *smalloc(unsigned int nbytes) {
         new_block->size = nbytes;
         new_block->next = allocated_list;
         allocated_list = new_block;
-        //printf("smalloc    [addr: %p, size: %d]\n", allocated_list->addr, allocated_list->size);
-       // printm_list(allocated_list);
         return allocated_list->addr;
     }
 
@@ -78,13 +72,14 @@ void *smalloc(unsigned int nbytes) {
 
 
 int sfree(void *addr) {
+    if(addr == NULL){//the given address is empty
+        return -1;
+    }
 	struct block *current = allocated_list;
     struct block *previous = NULL;
     struct block *next = allocated_list->next;
-    if(addr == NULL){
-        return -1;
-    }
 
+    //find the block from allocated list
     while(next != NULL && current->addr != addr){
         previous = current;
         current = current->next;
@@ -93,25 +88,33 @@ int sfree(void *addr) {
     if(next == NULL && current->addr!= addr){//cannot find the address
         return -1;
     }
+
     //step1: in this step remove the block from the allocated_list
+    if(previous == NULL){//remove the block from the end of the allocated list
+        allocated_list = next;
+    }else{
     previous->next = next;
+    }
 
     //step2: add the block into the freelist (free list: increasing address)
     struct block *previous_free = NULL;
     struct block *current_free = freelist;
     struct block *next_free = freelist->next;
 
-    while(next != NULL && addr > current->addr){
+
+    while(next_free != NULL && addr > current_free->addr){
         previous_free = current_free;
         current_free = current_free->next;
         next_free = current_free->next;
     }
-    if(next == NULL && addr > current->addr){//add at the end
+   
+   //the addr is the biggest in the free list
+    if(next_free == NULL && addr > current_free->addr){
         current_free->next = current;
         current->next = NULL;
         return 0;
     }
-    //printf("%p\n", current_free->addr);
+
     //now addr is smaller than current address-> insert before current_free
     if(previous_free == NULL){//add at the first digit
         current->next = freelist;
@@ -119,6 +122,7 @@ int sfree(void *addr) {
         return 0;
     }
 
+    //insert in the middle
     previous_free->next = current;
     current->next = current_free;
     return 0;
@@ -153,7 +157,6 @@ void mem_init(int size) {
     freelist->addr = mem;
     freelist->size = size;
     freelist->next = NULL; 
-    //printf("%s%p\n", "init free", mem);  
 }
 
 

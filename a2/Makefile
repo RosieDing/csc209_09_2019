@@ -2,6 +2,13 @@
 # with no arguments. 
 all : simpletest
 
+tests : mytest simpletest
+	./mytest 
+	./simpletest
+
+mytest : mytest.o smalloc.o testhelpers.o
+	gcc -Wall -g -o mytest mytest.o smalloc.o testhelpers.o
+
 # The target in this rule is the executable file name. The executable file 
 # depends on the three object files which are compiled separately using the 
 # rules below.  The action line in this rule links the three object files to 
@@ -12,6 +19,9 @@ simpletest : simpletest.o smalloc.o testhelpers.o
 
 # The following three rules compile a single .c file into an object file.  
 # We could collape these into one pattern rule.
+
+mytest.o : mytest.c smalloc.h
+	gcc -Wall -g -c mytest.c
 
 simpletest.o : simpletest.c smalloc.h
 	gcc -Wall -g -c simpletest.c
@@ -27,4 +37,4 @@ testhelpers.o : testhelpers.c smalloc.h
 # you might run "make clean" before git add and commit.
 
 clean : 
-	rm simpletest *.o
+	rm simpletest mytest *.o
