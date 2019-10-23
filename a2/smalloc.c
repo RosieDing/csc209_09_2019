@@ -41,7 +41,10 @@ void *smalloc(unsigned int nbytes) {
         if(previous == NULL){
             freelist = next;
         }else{
-        previous->next = next;}
+        previous->next = next;
+        printf("%p\n", next->addr);
+        }
+        
 
         //add it to the front of allocated_list
         current->next = allocated_list;
