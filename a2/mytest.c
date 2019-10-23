@@ -10,10 +10,19 @@
 
 
 /* In this interesting test I design an interesting condition: 
-1. I tried to add 3 blocks from freelist
-2. I tried to smalloc all the memory left in free to allocated_list.
+1. I tried to add 3 blocks from freelist;
+2. I tried to smalloc all the memory left in free to allocated_list;
 3. I tried to sfree all allocated_list back to freelist;
-4. I tried to 
+4. I tried to smalloc the last two block back to allocated_list;
+
+In this test, I tried to test all the boundary point of the list:
+which means that: smalloc when allocated_list is empty; 
+                  sfree when the freelist is empty or nearly empty;
+                  smalloc to make freelist empty;
+                  sfree to make allocated_list is empty;
+
+Why Interesting:
+since it is easy to ignore the checking of the boundary before each operation, when we write this program.
 
 */
 
