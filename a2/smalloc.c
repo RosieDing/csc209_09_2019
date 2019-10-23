@@ -29,9 +29,9 @@ void *smalloc(unsigned int nbytes) {
 
 
     while(next != NULL && size < nbytes){
-        current = current->next;
         previous = current;
-        next = current->next;
+        current = current->next;
+        next = next->next;
         size = current->size;
     }
 
@@ -42,10 +42,8 @@ void *smalloc(unsigned int nbytes) {
             freelist = next;
         }else{
         previous->next = next;
-        printf("%p\n", next->addr);
         }
-        
-
+    
         //add it to the front of allocated_list
         current->next = allocated_list;
         allocated_list = current;
@@ -84,7 +82,7 @@ int sfree(void *addr) {
     while(next != NULL && current->addr != addr){
         previous = current;
         current = current->next;
-        next = current->next;
+        next = next->next;
     }
 
     if(next == NULL && current->addr!= addr){//cannot find the address

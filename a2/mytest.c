@@ -9,7 +9,13 @@
 #define SIZE 4096 * 64
 
 
-/* In this tes */
+/* In this interesting test I design an interesting condition: 
+1. I tried to add 3 blocks from freelist
+2. I tried to smalloc all the memory left in free to allocated_list.
+3. I tried to sfree all allocated_list back to freelist;
+4. I tried to 
+
+*/
 
 int main(void) {
 
@@ -41,37 +47,12 @@ int main(void) {
     printf("List of free blocks:\n");
     print_free();
 
-    // printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
-    // ptrs[4] = smalloc(262072);
-    // if (ptrs[4] == NULL)
-    // {
-    //     fprintf(stderr, "%s\n", "Cannot smalloc the blocks");
-    // }else{
-    // write_to_mem(262072,ptrs[4],4);
-    // printf("%s\n%p\n", "Add new block: ",ptrs[4]);}
-
-    printf("List of allocated blocks:\n");
-    print_allocated();
-    printf("List of free blocks:\n");
-    print_free();
-
-    
 
     printf("freeing %p result = %d\n", ptrs[0], sfree(ptrs[0]));
     printf("freeing %p result = %d\n", ptrs[1], sfree(ptrs[1]));
     printf("freeing %p result = %d\n", ptrs[2], sfree(ptrs[2]));
     printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
-    //printf("freeing %p result = %d\n", ptrs[4], sfree(ptrs[4]));
-    //printf("freeing %p result = %d\n", ptrs[1], sfree(ptrs[1]));
-
-//     ptrs[4] = smalloc(262072);
-//     if (ptrs[4] == NULL)
-//     {
-//         fprintf(stderr, "%s\n", "Cannot smalloc the blocks");
-//     }else{
-//     write_to_mem(262072,ptrs[4],4);
-//     printf("%s\n%p\n", "Add new block: ",ptrs[4]);
-// }
+    
 
     ptrs[4] = smalloc(16);
     write_to_mem(16,ptrs[4],4);
