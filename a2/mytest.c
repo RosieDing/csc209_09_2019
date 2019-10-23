@@ -58,10 +58,10 @@ int main(void) {
     
 
     // printf("freeing %p result = %d\n", ptrs[1], sfree(ptrs[1]));
-    printf("List of allocated blocks:\n");
-    print_allocated();
-    printf("List of free blocks:\n");
-    print_free();
+    // printf("List of allocated blocks:\n");
+    // print_allocated();
+    // printf("List of free blocks:\n");
+    // print_free();
 
     mem_clean();
     return 0;

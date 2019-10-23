@@ -13,7 +13,7 @@ struct block *allocated_list;
 
 void *smalloc(unsigned int nbytes) {
 
-    if(nbytes == 0| freelist == NULL){
+    if((nbytes == 0)| (freelist == NULL)){
         return NULL;
     }
     
@@ -46,8 +46,6 @@ void *smalloc(unsigned int nbytes) {
         //add it to the front of allocated_list
         current->next = allocated_list;
         allocated_list = current;
-        printf("%p\n", freelist);
-
         return allocated_list->addr;
     }
 
@@ -72,7 +70,7 @@ void *smalloc(unsigned int nbytes) {
 
 
 int sfree(void *addr) {
-    if(addr == NULL | allocated_list == NULL){//the given address is empty
+    if((addr == NULL) | (allocated_list == NULL)){//the given address is empty
         return -1;
     }
 	struct block *current = allocated_list;
