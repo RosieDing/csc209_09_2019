@@ -18,7 +18,7 @@ int main(void) {
     char *ptrs[10];
     int i;
 
-    /* Call smalloc 4 times */
+    /* Call smalloc 3 times */
     
     for(i = 0; i < 3; i++) {
         int num_bytes = (i+1) * 10;
@@ -42,31 +42,26 @@ int main(void) {
     print_free();
 
     // printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
-     ptrs[4] = smalloc(262072);
-     printf("%p\n", ptrs[4]);
+    ptrs[4] = smalloc(262072);
+    if (ptrs[4] == NULL)
+    {
+        fprintf(stderr, "%s\n", "Cannot smalloc the blocks");
+    }else{
     write_to_mem(262072,ptrs[4],4);
-    printf("%s\n%p\n", "Add new block: ",ptrs[4]);
+    printf("%s\n%p\n", "Add new block: ",ptrs[4]);}
+
+    printf("List of allocated blocks:\n");
+    print_allocated();
+    printf("List of free blocks:\n");
+    print_free();
+
+    
 
     // printf("freeing %p result = %d\n", ptrs[1], sfree(ptrs[1]));
     printf("List of allocated blocks:\n");
     print_allocated();
     printf("List of free blocks:\n");
     print_free();
-
-    // printf("freeing %p result = %d\n", ptrs[3], sfree(ptrs[3]));
-    // printf("List of allocated blocks:\n");
-    // print_allocated();
-    // printf("List of free blocks:\n");
-    // print_free();
-    
-
-    // ptrs[4] = smalloc(2);
-    // write_to_mem(2,ptrs[4],4);
-    // printf("%s\n%p\n", "add new block",ptrs[4]);
-    // print_allocated();
-    // printf("List of free blocks:\n");
-    // print_free();
-
 
     mem_clean();
     return 0;
