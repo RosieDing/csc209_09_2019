@@ -74,7 +74,7 @@ int main(void) {
       exit(1);
     }
 
-    if (close(fd[0]) == -1) {
+    if (close(pipe_fd[0]) == -1) {
             perror("child close");
             exit(1);
     } 
