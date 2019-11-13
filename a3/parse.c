@@ -202,6 +202,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
         for(int i =0; i < MAXLINE; i++){
             if(str[i] == '\n'|| str[i] =='#'){ //end of the line
                 str[i] = '\0';//replace the '\n'
+                break;
             }
         }
 
