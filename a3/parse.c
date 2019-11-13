@@ -209,7 +209,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
 
         //if the line is an action line
-        if(str[0] == '\t'){
+        if(strcmp(str[0], '\t') == 0){
             str[0] = ' ';
             char** refined_list = split_array_by_space(str, &num_element);
 
