@@ -30,21 +30,24 @@ char** split_array_by_space(char* str, int* element_num){
         token = strtok(NULL, s);
     }
 
-    *element_num = index;//number of valid node in the list: i
-    char** result_list = malloc(index * sizeof(char *));
+    *element_num = index + 1;//number of valid node in the list: i
+    printf("%d\n", index);
+    char** result_list = malloc((index + 1) * sizeof(char *));
 
     for(int i = 0; i < index; i++){
         result_list[i] = storage_list[i];
     }
 
+    result_list[index] = NULL;
+
     free(storage_list);
 
     //debug
-    int i = 0;
-    while(result_list[i] != NULL) {
-        printf("c%s ", result_list[i]) ;
-            i++;
-        }
+    // int i = 0;
+    // while(result_list[i] != NULL) {
+    //     printf("%s ", result_list[i]) ;
+    //         i++;
+    //     }
 
     return result_list;//Remember to free the list at last!!!!!!!!!!!!!!!!
 }
@@ -209,7 +212,9 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
 
         //if the line is an action line
-        if(strncmp(str, "\t",1) == 0){
+        if(strncmp(str, "\t", 1) == 0){
+            printf("%s\n", "--------start action");
+
             str[0] = ' ';
             char** refined_list = split_array_by_space(str, &num_element);
 
@@ -219,10 +224,12 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
             //debug
             for(int i = 0; i < num_element; i++){
-            printf("%s%s  ", "action:", refined_list[i]);}
+            printf("%s%s\n", "action:", refined_list[i]);}
+
+
+
             if(cur_act == NULL){//first cur_act of the target
                 cur_act = new_act;
-
                 if(cur_readline_rule == NULL){
                     perror("no target exist");
                     exit(1);
@@ -230,7 +237,10 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
                 cur_readline_rule->actions= new_act;//add the action under the rule
                 printf("%s\n", cur_readline_rule->target);
                 printf("%s\n", "first arg add");
-            }else{
+
+            }
+
+            else{
                 cur_act->next_act = new_act;
                 cur_act = new_act;
             }
