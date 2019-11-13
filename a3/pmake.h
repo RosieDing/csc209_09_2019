@@ -69,5 +69,14 @@ char *args_to_string(char **args, char *buffer, int size);
    parent process will wait until all child processes have terminated before
    checking dependecy modfied times to decide whether to execute the actions
  */
-void run_make(char *target, Rule *rules, int pflag);
+void run_make(char *target, Rule *rules, int pflag);//ruls： head of linkedlist
+
+char** split_array_by_space(char* str, int* element_num);
+
+Rule* search_rules(Rule ** record_rules, int length_record_rules, char* target);
+
+Rule* create_rule(char* target, int* length_record_rules, Rule **record_rules);
+
+Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record_rules);
+
 

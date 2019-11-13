@@ -19,6 +19,14 @@
  */
 
 char **build_args(char *line) {
+//处理一个action
+
+  //以tab开头（\t） e.g.    target: dep + \t gcc -o....... ignore \t
+
+    //build_args: input: line
+    //return array of char* -> 作为execvp 的input
+
+  //max_args: 最大限度 
     
     // TODO
     return NULL;
