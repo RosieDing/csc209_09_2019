@@ -181,7 +181,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
     Action *cur_act = NULL;
 
-    Rule **record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
+    record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
     int length_record_rules = 0;
 
    // printf("%s%d\n", "debug",2);
