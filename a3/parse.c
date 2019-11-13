@@ -8,6 +8,8 @@
 
 #include "pmake.h"
 
+Rule **record_rules;
+
 
 //helper functions:
 char** split_array_by_space(char* str, int* element_num){
@@ -179,7 +181,6 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
     Action *cur_act = NULL;
 
-    //Rule *prev_rule = NULL;
     Rule **record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
     int length_record_rules = 0;
 
@@ -320,7 +321,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
         }
     }
     //printf("%s\n", "finish");
-free(record_rules);
+//free(record_rules);
 
     return rule_list;
 }
