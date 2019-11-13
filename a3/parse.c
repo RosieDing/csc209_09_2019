@@ -42,7 +42,7 @@ char** split_array_by_space(char* str, int* element_num){
     //debug
     int i = 0;
     while(result_list[i] != NULL) {
-        printf("%s ", result_list[i]) ;
+        printf("c%s ", result_list[i]) ;
             i++;
         }
 
@@ -195,7 +195,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
         //if the line is a comment or empty
         if(is_empty == 1){
-            break;
+            continue;
         }
 
 
