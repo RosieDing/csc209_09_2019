@@ -181,7 +181,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
     int length_record_rules = 0;
 
     printf("%s%d\n", "debug",2);
-    char str[MAXLINE] = {0}; //init line of make file
+    char str[MAXLINE] = {'\0'}; //init line of make file
 
     if(!fp){
         exit(1);
@@ -209,7 +209,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
 
         //if the line is an action line
-        if(strcmp(str[0], '\t') == 0){
+        if(strncmp(str, "\t",1) == 0){
             str[0] = ' ';
             char** refined_list = split_array_by_space(str, &num_element);
 
