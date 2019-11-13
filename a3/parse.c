@@ -31,7 +31,7 @@ char** split_array_by_space(char* str, int* element_num){
     }
 
     *element_num = index;//number of valid node in the list: i
-    printf("%d\n", index);
+    //printf("%d\n", index);
     char** result_list = malloc((index + 1) * sizeof(char *));
 
     for(int i = 0; i < index; i++){
@@ -169,7 +169,7 @@ void print_rules(Rule *rules){
  */
 Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
-    printf("%s%d\n", "debug",1);
+    //printf("%s%d\n", "debug",1);
 
     Rule *rule_list = NULL;//the final rule list we need to return
 
@@ -183,7 +183,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
     Rule **record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
     int length_record_rules = 0;
 
-    printf("%s%d\n", "debug",2);
+   // printf("%s%d\n", "debug",2);
     char str[MAXLINE] = {'\0'}; //init line of make file
 
     if(!fp){
@@ -193,7 +193,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
     int num_element = 0;
 
     while(fgets(str, MAXLINE, fp)!= NULL){//read the lines
-        printf("%s%d\n", "debug",1);
+       // printf("%s%d\n", "debug",1);
         int is_empty = is_comment_or_empty(str);
 
         //if the line is a comment or empty
@@ -213,7 +213,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
         //if the line is an action line
         if(strncmp(str, "\t", 1) == 0){
-            printf("%s\n", "--------start action");
+           // printf("%s\n", "--------start action");
 
             str[0] = ' ';
             char** refined_list = split_array_by_space(str, &num_element);
@@ -235,8 +235,8 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
                     exit(1);
                 }
                 cur_readline_rule->actions= new_act;//add the action under the rule
-                printf("%s\n", cur_readline_rule->target);
-                printf("%s\n", "first arg add");
+                //printf("%s\n", cur_readline_rule->target);
+                //printf("%s\n", "first arg add");
 
             }
 
@@ -245,7 +245,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
                 cur_act = new_act;
             }
 
-            print_actions(new_act);
+           // print_actions(new_act);
 
         }
 
@@ -277,8 +277,8 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
             cur_readline_rule = new_rule;
 
-            printf("%s%d\n", "rule_list add success",1);
-            printf("%s\n", new_rule->target);
+            //printf("%s%d\n", "rule_list add success",1);
+            //printf("%s\n", new_rule->target);
 
             //check number of dependency:
             if(num_element > 2){
@@ -289,9 +289,9 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
                 Dependency *cur_dep = NULL;
 
                 for(int i = 0; i < num_dep_left; i++){//iterate all the deps
-printf("%s%s\n", "add dep",refined_list[i+2]);
+
                     Dependency* dep = create_dep(refined_list[i+2], record_rules, &length_record_rules);
-                    printf("%s%s\n", "add dep",refined_list[i+2]);
+                    //printf("%s%s\n", "add dep",refined_list[i+2]);
                     if(i == 0){
                         cur_rule_list->dependencies = dep;
                     }
@@ -307,7 +307,7 @@ printf("%s%s\n", "add dep",refined_list[i+2]);
                         cur_dep = dep;
                     }
 
-                    printf("%s\n", "dep end success");
+                    //printf("%s\n", "dep end success");
                 }
 
             }
@@ -319,7 +319,7 @@ printf("%s%s\n", "add dep",refined_list[i+2]);
             //end
         }
     }
-    printf("%s\n", "finish");
+    //printf("%s\n", "finish");
     return rule_list;
 }
 
