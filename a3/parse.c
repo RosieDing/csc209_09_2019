@@ -9,6 +9,7 @@
 #include "pmake.h"
 
 Rule **record_rules;
+int length_record_rules;
 
 
 //helper functions:
@@ -56,7 +57,7 @@ char** split_array_by_space(char* str, int* element_num){
 
 
 //search for the target rule in the list
-Rule* search_rules(Rule ** record_rules, int length_record_rules, char* target){
+Rule* search_rules(char* target){
     if((record_rules != NULL) && (length_record_rules != 0)){
         for(int i = 0; i < length_record_rules; i++){
             if(strcmp(record_rules[i]->target, target)== 0){
@@ -88,7 +89,8 @@ Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record
     Dependency* new_dep = malloc(sizeof(Dependency));
     Rule *rule_find = NULL;
     if((*length_record_rules) != 0){//rules is not empty
-        rule_find = search_rules(record_rules, *length_record_rules, rule_name);
+        
+rule_find = search_rules(rule_name);
     }
 
     if(rule_find == NULL){
@@ -263,7 +265,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
             }
 
 
-            Rule* new_rule = search_rules(record_rules, length_record_rules, target);
+            Rule* new_rule = search_rules(target);
             if(new_rule == NULL){
                 new_rule = create_rule(target, &length_record_rules, record_rules);
             }

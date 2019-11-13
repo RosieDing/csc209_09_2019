@@ -16,7 +16,7 @@ void run_make(char *target, Rule *rules, int pflag) {
 		return 0;
 	}
     //1. search the rule for the given target
-    Rule* first_rule = serach_rules(record_rules, length_record_rules, target);
+    Rule* first_rule = search_rules(target);
     //the selected target is not in the list
     if(first_rule == NULL){
     	first_rule = rules;
@@ -25,6 +25,6 @@ void run_make(char *target, Rule *rules, int pflag) {
     //
 
 
-    return ;
+    return NULL;
 }
 
