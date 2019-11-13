@@ -30,7 +30,7 @@ char** split_array_by_space(char* str, int* element_num){
         token = strtok(NULL, s);
     }
 
-    *element_num = index + 1;//number of valid node in the list: i
+    *element_num = index;//number of valid node in the list: i
     printf("%d\n", index);
     char** result_list = malloc((index + 1) * sizeof(char *));
 
@@ -223,8 +223,8 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
             new_act->next_act = NULL;
 
             //debug
-            for(int i = 0; i < num_element; i++){
-            printf("%s%s\n", "action:", refined_list[i]);}
+           // for(int i = 0; i < num_element; i++){
+            //printf("%s%s\n", "action:", refined_list[i]);}
 
 
 
@@ -289,6 +289,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
                 Dependency *cur_dep = NULL;
 
                 for(int i = 0; i < num_dep_left; i++){//iterate all the deps
+printf("%s%s\n", "add dep",refined_list[i+2]);
                     Dependency* dep = create_dep(refined_list[i+2], record_rules, &length_record_rules);
                     printf("%s%s\n", "add dep",refined_list[i+2]);
                     if(i == 0){
