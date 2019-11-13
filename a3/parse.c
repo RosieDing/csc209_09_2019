@@ -320,6 +320,8 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
         }
     }
     //printf("%s\n", "finish");
+free(record_rules);
+
     return rule_list;
 }
 
