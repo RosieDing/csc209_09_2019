@@ -109,29 +109,36 @@ void run_make(char *target, Rule *rules, int pflag) {
       while(cur_ac != NULL){
         int result;
         //call fork:
-        result = fork();
-        if(result == -1){//error check
-          perror("run_make error fork");
-          exit(1);
-        }
+        // result = fork();
+        // if(result == -1){//error check
+        //   perror("run_make error fork");
+        //   exit(1);
+        // }
 
-        else if(result == 0){//child process
-          int ret = execute(cur_ac->args);
+        // else if(result == 0){//child process
+        //   int ret = execute(cur_ac->args);
+        //   if(ret == -1){
+        //     exit(-1);//if execute is failed
+        //   }
+        // }
+
+        // else{//parent
+        //   int status;
+        //   if(wait(&status) ==1){
+        //     perror("run_make error wait");
+        //     exit(1);
+        //   }
+        //   if(WIFEXITED(status) == -1){
+        //     exit(1);// execute failed
+        //   }
+        // }
+
+
+        int ret = execute(cur_ac->args);
           if(ret == -1){
             exit(-1);//if execute is failed
           }
-        }
 
-        else{//parent
-          int status;
-          if(wait(&status) ==1){
-            perror("run_make error wait");
-            exit(1);
-          }
-          if(WIFEXITED(status) == -1){
-            exit(1);// execute failed
-          }
-        }
         cur_ac = cur_ac->next_act;
       }
     }
