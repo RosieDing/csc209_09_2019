@@ -41,7 +41,7 @@ char** split_array_by_space(char* str, int* element_num){
         result_list[i] = storage_list[i];
     }
 
-    result_list[index] = NULL;
+    result_list[index] = NULL;//make the last element as NULL
 
     free(storage_list);
 
@@ -89,8 +89,7 @@ Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record
     Dependency* new_dep = malloc(sizeof(Dependency));
     Rule *rule_find = NULL;
     if((*length_record_rules) != 0){//rules is not empty
-        
-rule_find = search_rules(rule_name);
+        rule_find = search_rules(rule_name);
     }
 
     if(rule_find == NULL){
