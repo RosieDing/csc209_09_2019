@@ -95,8 +95,10 @@ void run_make(char *target, Rule *rules, int pflag) {
   else{
     latest_time = 0;
     Dependency *cur_dep = first_rule->dependencies;
-    while(cur_dep->next_dep != NULL){
+    
+    while(cur_dep != NULL){
       run_make(cur_dep->rule->target, rules, pflag);
+      cur_dep = cur_dep->next_dep;
     }
 
     int is_new = is_first_newer(first_rule->target, latest_time);
