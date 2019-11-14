@@ -19,7 +19,7 @@ char** split_array_by_space(char* str, int* element_num){
     char *token;
     int element_length;
     int index = 0;
-    char** storage_list = malloc(strlen(str)*(sizeof(char *)));//init a array to strore the length
+    char** storage_list = malloc( MAX_ARGS *(sizeof(char *)));//init a array to strore the length
 
 
     token = strtok(str, s);
@@ -45,12 +45,6 @@ char** split_array_by_space(char* str, int* element_num){
 
     free(storage_list);
 
-    //debug
-    // int i = 0;
-    // while(result_list[i] != NULL) {
-    //     printf("%s ", result_list[i]) ;
-    //         i++;
-    //     }
 
     return result_list;//Remember to free the list at last!!!!!!!!!!!!!!!!
 }

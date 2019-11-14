@@ -55,6 +55,7 @@ int is_first_newer(char *path_a, int time_b){
     if(time_a < time_b){//second is newer
           return 0;
     }
+    return -1;
 }
 
 int execute(char** argv){
@@ -67,9 +68,7 @@ int execute(char** argv){
   return 0;
 }
 
-int make_parral(){
 
-}
 
 
 void run_make(char *target, Rule *rules, int pflag) {
