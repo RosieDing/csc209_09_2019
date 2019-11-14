@@ -107,7 +107,7 @@ void run_make(char *target, Rule *rules, int pflag) {
       Action *cur_ac = first_rule->actions;
 
       while(cur_ac != NULL){
-        int result;
+        //int result;
         //call fork:
         // result = fork();
         // if(result == -1){//error check
