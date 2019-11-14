@@ -253,16 +253,16 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
         }
 
         //if the line is a target line
-        else{
+        else if(strstr(str, ":") != NULL){
             cur_act = NULL;
 
             char** refined_list = split_array_by_space(str, &num_element);
             // get the first target line
             char* target = refined_list[0];
 
-            if(*(refined_list[1]) != ':'){
-                    perror("target line false");
-            }
+            //if(*(refined_list[1]) != ':'){
+              //      perror("target line false");
+            //}
 
 
             Rule* new_rule = search_rules(target);

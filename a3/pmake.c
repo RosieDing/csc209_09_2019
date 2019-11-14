@@ -23,7 +23,7 @@
 
 int main(int argc, char **argv) {
     FILE *fp;
-    char *filename = "make_test.make";
+    char *filename = "Makefile";
     char *target = NULL;
     int output = 0;
     int parallel = 0;
