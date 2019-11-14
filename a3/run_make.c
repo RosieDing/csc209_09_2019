@@ -45,9 +45,9 @@ int getFileModifiedTime(char *path_a){
 
 
 //return 1 is time_a is newer, return 0 time b is newer
-int is_first_newer(char *path_a, char *path_b){
+int is_first_newer(char *path_a, int time_b){
     int time_a = getFileModifiedTime(path_a);
-    int time_b = getFileModifiedTime(path_b);
+    //int time_b = getFileModifiedTime(path_b);
 
     if(time_a > time_b){//first is newer
           return 1;
