@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if(optind < argc) {//指定run file里的哪一个target （默认为null: part2/3 run第一条）
+    if(optind < argc) {
         target = argv[optind];
     }
     if((fp = fopen(filename, "r")) == NULL) {

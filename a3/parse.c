@@ -225,12 +225,6 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
             new_act->args = refined_list;
             new_act->next_act = NULL;
 
-            //debug
-           // for(int i = 0; i < num_element; i++){
-            //printf("%s%s\n", "action:", refined_list[i]);}
-
-
-
             if(cur_act == NULL){//first cur_act of the target
                 cur_act = new_act;
                 if(cur_readline_rule == NULL){

@@ -85,9 +85,9 @@ void run_make(char *target, Rule *rules, int pflag) {
        latest_target = first_rule->dependencies;
       // if()
     }
-    else{
+    //else{
        
-    }
+   // }
 
 
 
