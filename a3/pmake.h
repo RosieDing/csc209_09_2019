@@ -1,5 +1,7 @@
 
 #define MAXLINE 256
+#define MAX_ARGS 32
+#define MAX_NAME 128
 
 /* A line from a makefile is either a target line, an action line, 
 or a comment or line to ignore
