@@ -13,6 +13,7 @@
 
 extern Rule **record_rules;
 extern int length_record_rules;
+int latest_time;
 
 
 int getFileModifiedTime_sec(char *path)
@@ -37,10 +38,9 @@ int getFileModifiedTime_nsec(char *path)
     exit(1);
 }
 
-int getFileModifiedTime(char *path){
+int getFileModifiedTime(char *path_a){
   int time_a = getFileModifiedTime_sec(path_a)*1000000000 + getFileModifiedTime_nsec(path_a);
   return time_a;
-
 }
 
 
@@ -57,8 +57,8 @@ int is_first_newer(char *path_a, char *path_b){
     }
 }
 
-int execute(char** arg){
-  ret = execvp(argv[0],argv);
+int execute(char** argv){
+  int ret = execvp(argv[0],argv);
   if(ret == -1){
     perror("execl error");
     exit(1);
@@ -67,11 +67,10 @@ int execute(char** arg){
   return 0;
 }
 
-int make
+int make_parral(){
 
+}
 
-
-int latest_time;
 
 void run_make(char *target, Rule *rules, int pflag) {
 	
@@ -82,10 +81,9 @@ void run_make(char *target, Rule *rules, int pflag) {
     first_rule = rules;
   }
 
-
   //base Case: the given target not contains any dep
   if(first_rule->dependencies == NULL){
-    if(latest_time == NULL){
+    if(latest_time == 0){
       latest_time = getFileModifiedTime(first_rule->target);
     }else{
       int is_new = is_first_newer(first_rule->target, latest_time);
@@ -96,6 +94,7 @@ void run_make(char *target, Rule *rules, int pflag) {
   }
   //recursion step: dependency is not NULL
   else{
+    latest_time = 0;
     Dependency *cur_dep = first_rule->dependencies;
     while(cur_dep->next_dep != NULL){
       run_make(cur_dep->rule->target, rules, pflag);
@@ -123,6 +122,7 @@ void run_make(char *target, Rule *rules, int pflag) {
             exit(-1);//if execute is failed
           }
         }
+
         else{//parent
           int status;
           if(wait(&status) ==1){
