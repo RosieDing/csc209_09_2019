@@ -68,13 +68,29 @@ int execute(char** argv){
   return 0;
 }
 
+Rule* search_rule(char *target, Rule *rules){
+Rule* cur = rules;
+if(cur != NULL){
+if(strcmp(cur->target, target) == 0){
+return cur;
+}
+cur = cur->next_rule;
+
+}
+return NULL;
+}
 
 
 
 void run_make(char *target, Rule *rules, int pflag) {
 	
   //1. search the rule for the given target
-  Rule* first_rule = search_rules(target);
+  Rule* first_rule = search_rule(target, rules);
+
+  if(first_rule == NULL){
+     perror("error to find rules");
+     exit(-1);
+   }
   //the selected target is not in the list
   if(target == NULL){
     first_rule = rules;
