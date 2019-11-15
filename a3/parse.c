@@ -51,18 +51,18 @@ char** split_array_by_space(char* str, int* element_num){
 
 
 //search for the target rule in the list
-Rule* search_rules(char* target){
-    if((record_rules != NULL) && (length_record_rules != 0)){
-        for(int i = 0; i < length_record_rules; i++){
-            if(strcmp(record_rules[i]->target, target)== 0){
-                return record_rules[i];
-            }
-        }
-    }
+// Rule* search_rules(char* target){
+//     if((record_rules != NULL) && (length_record_rules != 0)){
+//         for(int i = 0; i < length_record_rules; i++){
+//             if(strcmp(record_rules[i]->target, target)== 0){
+//                 return record_rules[i];
+//             }
+//         }
+//     }
 
-    return NULL;
+//     return NULL;
 
-}
+// }
 
 Rule* create_rule(char* target, int *length_record_rules, Rule ** record_rules){
     Rule *new_rule = malloc(sizeof(Rule));
@@ -79,11 +79,11 @@ Rule* create_rule(char* target, int *length_record_rules, Rule ** record_rules){
 
 }
 
-Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record_rules){
+Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record_rules, Rule * rules){
     Dependency* new_dep = malloc(sizeof(Dependency));
     Rule *rule_find = NULL;
     if((*length_record_rules) != 0){//rules is not empty
-        rule_find = search_rules(rule_name);
+        rule_find = search_rule(rule_name,rules);
     }
 
     if(rule_find == NULL){
@@ -252,7 +252,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
             //}
 
 
-            Rule* new_rule = search_rules(target);
+            Rule* new_rule = search_rule(target,rule_list);
             if(new_rule == NULL){
                 new_rule = create_rule(target, &length_record_rules, record_rules);
             }
