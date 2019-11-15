@@ -8,8 +8,8 @@
 
 #include "pmake.h"
 
-Rule **record_rules;
-int length_record_rules;
+//Rule **record_rules;
+//int length_record_rules;
 
 
 //helper functions:
@@ -64,35 +64,47 @@ char** split_array_by_space(char* str, int* element_num){
 
 // }
 
-Rule* create_rule(char* target, int *length_record_rules, Rule ** record_rules){
-    Rule *new_rule = malloc(sizeof(Rule));
+Rule* create_rule(char* target, Rule* rules){
+// first search rules
+Rule *new_rule;
+new_rule = search_rule(target, rules);
+
+if(new_rule == NULL){
+
+   new_rule = malloc(sizeof(Rule));
+
     new_rule->target = malloc(strlen(target)+1);
+
     strcpy(new_rule -> target, target);
+
     new_rule-> dependencies = NULL;
     new_rule-> actions = NULL;
     new_rule-> next_rule= NULL;
     //add this rule into our record_list
-    record_rules[*length_record_rules] = new_rule;
-    *length_record_rules += 1;
+    //record_rules[*length_record_rules] = new_rule;
 
+    //*length_record_rules += 1;
+}
     return new_rule;
 
 }
 
-Dependency* create_dep(char *rule_name, Rule ** record_rules, int *length_record_rules, Rule * rules){
+Dependency* create_dep(char *rule_name, Rule* rules){
     Dependency* new_dep = malloc(sizeof(Dependency));
+
     Rule *rule_find = NULL;
-    if((*length_record_rules) != 0){//rules is not empty
+
+  //  if((*length_record_rules) != 0){//rules is not empty
         rule_find = search_rule(rule_name,rules);
-    }
+    //}
 
     if(rule_find == NULL){
-        rule_find = create_rule(rule_name, length_record_rules, record_rules);
+        rule_find = create_rule(rule_name, rules);
     }
     
     //record of rules is empty or rule not find:
 
-    new_dep-> rule = rule_find;
+    new_dep->rule = rule_find;
 
     return new_dep;
 
@@ -175,9 +187,11 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
     Rule *cur_readline_rule = NULL;
 
     Action *cur_act = NULL;
+    
+    //Rule *cur_rule = NULL;
 
-    record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
-    int length_record_rules = 0;
+  //  record_rules = malloc(sizeof(Rule *) * 256);// for record all the rules
+  //  int length_record_rules = 0;
 
    // printf("%s%d\n", "debug",2);
     char str[MAXLINE] = {'\0'}; //init line of make file
@@ -253,18 +267,19 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
 
             Rule* new_rule = search_rule(target,rule_list);
+
             if(new_rule == NULL){
-                new_rule = create_rule(target, &length_record_rules, record_rules);
+                new_rule = create_rule(target, rule_list);
+                if(rule_list == NULL){
+                    rule_list = new_rule;
+                    cur_rule_list = rule_list;
+                }else{
+                    cur_rule_list->next_rule = new_rule;
+                    cur_rule_list = new_rule;
             }
 
-            if(rule_list == NULL){
-                rule_list = new_rule;
-                cur_rule_list = rule_list;
-            }else{
-                cur_rule_list->next_rule = new_rule;
-                cur_rule_list = new_rule;
             }
-
+            
             cur_readline_rule = new_rule;
 
             //printf("%s%d\n", "rule_list add success",1);
@@ -280,10 +295,10 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
                 for(int i = 0; i < num_dep_left; i++){//iterate all the deps
 
-                    Dependency* dep = create_dep(refined_list[i+2], record_rules, &length_record_rules, rule_list);
+                    Dependency* dep = create_dep(refined_list[i+2], rule_list);
                     //printf("%s%s\n", "add dep",refined_list[i+2]);
                     if(i == 0){
-                        cur_rule_list->dependencies = dep;
+                        cur_readline_rule->dependencies = dep;
                     }
 
                     cur_rule_list->next_rule = dep->rule;
@@ -308,6 +323,9 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
             free(refined_list);
             //end
         }
+
+//print_rules(rule_list);
+//printf("\n");
     }
     //printf("%s\n", "finish");
 //free(record_rules);
