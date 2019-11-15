@@ -64,7 +64,7 @@ int execute(char** argv){
     perror("execl error");
     exit(1);
   }
-  printf("%s\n","exiting main process ----");
+  //printf("%s\n","exiting main process ----");
   return 0;
 }
 
@@ -129,31 +129,31 @@ else{
       Action *cur_ac = first_rule->actions;
 
       while(cur_ac != NULL){
-        //int result;
-        //call fork:
-        // result = fork();
-        // if(result == -1){//error check
-        //   perror("run_make error fork");
-        //   exit(1);
-        // }
+        int result;
+        call fork:
+         result = fork();
+         if(result == -1){//error check
+           perror("run_make error fork");
+           exit(1);
+         }
 
-        // else if(result == 0){//child process
-        //   int ret = execute(cur_ac->args);
-        //   if(ret == -1){
-        //     exit(-1);//if execute is failed
-        //   }
-        // }
+         else if(result == 0){//child process
+           int ret = execute(cur_ac->args);
+           if(ret == -1){
+             exit(-1);//if execute is failed
+           }
+         }
 
-        // else{//parent
-        //   int status;
-        //   if(wait(&status) ==1){
-        //     perror("run_make error wait");
-        //     exit(1);
-        //   }
-        //   if(WIFEXITED(status) == -1){
-        //     exit(1);// execute failed
-        //   }
-        // }
+         else{//parent
+           int status;
+           if(wait(&status) ==1){
+             perror("run_make error wait");
+             exit(1);
+           }
+           if(WIFEXITED(status) == -1){
+             exit(1);// execute failed
+           }
+         }
 
 
         int ret = execute(cur_ac->args);

@@ -76,7 +76,7 @@ void run_make(char *target, Rule *rules, int pflag);//ruls： head of linkedlist
 char** split_array_by_space(char* str, int* element_num);
 
 //int this method return the rule found in all the listS
-Rule* search_rules(char* target);
+Rule* search_rule(char *target, Rule *rules)
 
 Rule* create_rule(char* target, int* length_record_rules, Rule **record_rules);
 
