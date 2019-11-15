@@ -59,27 +59,25 @@ int is_first_newer(char *path_a, int time_b){
 }
 
 int execute(char** argv){
-
   int ret = execvp(argv[0],argv);
   if(ret == -1){
     perror("execl error");
     exit(1);
   }
-  printf("%s","exiting main process ----\n");
+  printf("%s\n","exiting main process ----");
   return 0;
 }
 
 Rule* search_rule(char *target, Rule *rules){
-Rule* cur = rules;
-while(cur != NULL){
-printf("%s",cur->target);
-if(strcmp(cur->target, target) == 0){
-return cur;
-}
-cur = cur->next_rule;
-
-}
-return NULL;
+  Rule* cur = rules;
+  while(cur != NULL){
+    //printf("%s",cur->target);
+    if(strcmp(cur->target, target) == 0){
+      return cur;
+    }
+    cur = cur->next_rule;
+  }
+  return NULL;
 }
 
 
@@ -110,9 +108,8 @@ else{
       if(is_new == 1){
         latest_time = getFileModifiedTime(first_rule->target);
       }
-
     }
-return;
+    return;
   }
   //recursion step: dependency is not NULL
   else{
