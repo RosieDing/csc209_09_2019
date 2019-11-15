@@ -59,18 +59,20 @@ int is_first_newer(char *path_a, int time_b){
 }
 
 int execute(char** argv){
+
   int ret = execvp(argv[0],argv);
   if(ret == -1){
     perror("execl error");
     exit(1);
   }
-  printf("exiting main process ----\n");
+  printf("%s","exiting main process ----\n");
   return 0;
 }
 
 Rule* search_rule(char *target, Rule *rules){
 Rule* cur = rules;
-if(cur != NULL){
+while(cur != NULL){
+printf("%s",cur->target);
 if(strcmp(cur->target, target) == 0){
 return cur;
 }
@@ -83,18 +85,21 @@ return NULL;
 
 
 void run_make(char *target, Rule *rules, int pflag) {
-	
-  //1. search the rule for the given target
-  Rule* first_rule = search_rule(target, rules);
+  //the selected target is not in the list
+Rule* first_rule;
+  if(target == NULL){
+    first_rule = rules;
+  }
+
+else{
+//1. search the rule for the given target
+  first_rule = search_rule(target, rules);
 
   if(first_rule == NULL){
      perror("error to find rules");
      exit(-1);
    }
-  //the selected target is not in the list
-  if(target == NULL){
-    first_rule = rules;
-  }
+}
 
   //base Case: the given target not contains any dep
   if(first_rule->dependencies == NULL){
@@ -105,7 +110,9 @@ void run_make(char *target, Rule *rules, int pflag) {
       if(is_new == 1){
         latest_time = getFileModifiedTime(first_rule->target);
       }
+
     }
+return;
   }
   //recursion step: dependency is not NULL
   else{

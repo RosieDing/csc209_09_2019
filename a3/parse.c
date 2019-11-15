@@ -15,7 +15,7 @@ int length_record_rules;
 //helper functions:
 char** split_array_by_space(char* str, int* element_num){
 
-    const char s[2] = " ";
+    const char s[3] = "\n ";
     char *token;
     int element_length;
     int index = 0;
