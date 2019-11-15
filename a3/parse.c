@@ -280,7 +280,7 @@ Rule *parse_file(FILE *fp) {//fp: already opened file pointer
 
                 for(int i = 0; i < num_dep_left; i++){//iterate all the deps
 
-                    Dependency* dep = create_dep(refined_list[i+2], record_rules, &length_record_rules);
+                    Dependency* dep = create_dep(refined_list[i+2], record_rules, &length_record_rules, rule_list);
                     //printf("%s%s\n", "add dep",refined_list[i+2]);
                     if(i == 0){
                         cur_rule_list->dependencies = dep;
