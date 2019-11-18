@@ -18,8 +18,11 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    // TODO: complete this program according its description above.
-
+    int list[100];
+    for(int i = 0; i< 100; i++){
+        list[i] = random()%100;
+    }
+    fwrite(list, sizeof(int), 100,fp);
 
 
 
