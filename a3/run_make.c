@@ -130,7 +130,7 @@ else{
 
       while(cur_ac != NULL){
         int result;
-        call fork:
+        //call fork:
          result = fork();
          if(result == -1){//error check
            perror("run_make error fork");
