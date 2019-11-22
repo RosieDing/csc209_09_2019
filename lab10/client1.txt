@@ -1,0 +1,15 @@
+Script started on 2019-11-22 17:33:12-0500
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ exitscript client1.txtls[Krm *.txtls[Kscript client.txt[3Prm client.txt [K[K[K[K[K[K[K[K[K[K[K[K[K[Krandclient 127.0.0.1
+connect: Connection refused
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ randclient 127.0.0.1
+connect: Connection refused
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ run[K[K[Krandclient 127.0.0.1
+connect: Connection refused
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ 
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ randclient 127.0.0.1
+connect: Connection refused
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ randclient 127.0.0.1
+]0;dingruos@wolf:/h/u4/c7/04/dingruos/csc209/dingruos/lab10wolf:~/csc209/dingruos/lab10$ exit
+exit
+
+Script done on 2019-11-22 17:38:03-0500
