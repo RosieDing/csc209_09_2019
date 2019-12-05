@@ -89,12 +89,6 @@ int main(int argc, char *argv[]){
 	FD_ZERO(&all_set);
 	FD_SET(gatewayfd, &all_set);
 
-	//struct timeval timeout; //= {5,0};
-	//timeout.tv_sec = 800;
-	//timeout.tv_usec = 0;
-
-	//int device_list[MAXDEV] = {0};
-
 	while(1) {
 
        struct timeval timeout;
@@ -111,7 +105,7 @@ int main(int argc, char *argv[]){
 		}
 		if(nearby ==-1){
 			perror("gateway: select");
-            exit(1);
+                        exit(1);
 		}
 
 		//2. check user connection --> from listen socket
@@ -130,7 +124,7 @@ int main(int argc, char *argv[]){
             if (FD_ISSET(i, &copy_all) && i != gatewayfd) {
                 int pt = read_from(i, cig_serialized, &cig);
                 if (pt > 0) {
-                	close(i);
+                    close(i);
                     FD_CLR(i, &all_set);
                     //close the fd
                 }
