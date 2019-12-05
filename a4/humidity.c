@@ -83,9 +83,11 @@ int main(int argc, char **argv) {
 		//1.First Hankshake process
 		if(msgno == 1){
 			cig.hdr.device_id = -1;
+			cig.hdr.type = HANDSHAKE;
 			msgno += 1;
 		}
 		
+		//printf("%s\n", cig_serialized);
 		strcpy(cig_serialized,serialize_cignal(cig));
 		cig_serialized[CIGLEN] = '\0';
 		int num_written = write(peerfd, cig_serialized, CIGLEN);

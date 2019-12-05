@@ -37,27 +37,6 @@ int read_from(int peerfd, char *cig_serialized, struct cignal *cig) {
 }
 
 
-/* search the client_id */
-int search_client_index(int client_id, int *device_record){
-	if(client_id == -1){
-		for(int i = 0; i < MAXDEV; i++){
-			if(device_record[i] == 0){
-				return i;
-			}
-		}
-	}
-	int pt = is_registered(client_id, device_record);
-	if(pt == 1){
-		for(int i = 0; i < MAXDEV; i++){
-			if(device_record[i] == client_id){
-				return i;
-			}
-		}
-	}
-	return -1;
-}
-
-
 
 int main(int argc, char *argv[]){
 	int port;
@@ -114,7 +93,7 @@ int main(int argc, char *argv[]){
 	timeout.tv_sec = 5;
 	timeout.tv_usec = 0;
 
-
+	//int device_list[MAXDEV] = {0};
 
 	while(1) {
 
@@ -150,41 +129,44 @@ int main(int argc, char *argv[]){
 			    perror("gateWay: read failed");
 			    exit(1);
 			}
-		
 
-			int client_id = cig.hdr.device_id;
+			//printf("%s\n", cig_serialized);
+			pt = process_message(&cig, device_record);
 
-			//handshake
-			if(client_id == -1){
-				int client_id = register_device(device_record);//new client add to device_record list
-				if(client_id < 0){
-					perror("gateway: register_device");
-					exit(1);
-				}
-				cig.hdr.device_id = client_id;
-				printf("********************END EVENT********************\n\n");
+			if(pt < 0){
+			    perror("process_message");
+			    exit(1);
 			}
 			
-			else{
-			    pt = process_message(&cig, device_record);
-			    if(pt < 0){
-			    	perror("process_message");
-			    	exit(1);
-			    }
-			}
 
 			strcpy(cig_serialized,serialize_cignal(cig));
 			cig_serialized[CIGLEN] = '\0';
+
 			pt = write(peerfd, cig_serialized, CIGLEN);
 			if(pt != CIGLEN){
 				perror("gateway write failed");
 			    exit(1);
 			}
-
-			//FD_CLR(peerfd, &all_set);//finish hand shake-> disconnected!
+			 close(peerfd);
+			 FD_CLR(peerfd, &all_set);//finish hand shake-> disconnected!
 		}
 
+		// for (int i = 0; i < max_fd; i++) {
+  //           if (FD_ISSET(i, &copy_all)) {
+  //               int client_closed = read_from(i, cig_serialized, &cig);
+  //               if (client_closed > 0) {
+  //               	close(i);
+  //                   FD_CLR(i, &all_set);
+  //                   printf("Client %d disconnected\n", client_closed);
+  //               } else {
+  //                   printf("Echoing message from client %d\n", i);
+  //               }
+  //           }
+  //       }
+
 	}
+
+
 
 	return 0;
 }

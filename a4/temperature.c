@@ -77,6 +77,7 @@ int main(int argc, char **argv) {
 		//1.First Hankshake process
 		if(msgno == 1){
 			cig.hdr.device_id = -1;
+			cig.hdr.type = HANDSHAKE;
 			msgno += 1;
 		}
 		
