@@ -7,6 +7,7 @@ int is_valid_type(struct cignal *cig) {
     if ((cig->hdr.type == HANDSHAKE) || (cig->hdr.type == UPDATE)) {
         return 1;
     }
+
     return -1;
 }
 
@@ -24,7 +25,7 @@ int is_registered(int id, int *device_record) {
  */
 int register_device(int *device_record) {
     for (int i = 0; i < MAXDEV; i++) {
-        if (device_record[i] == 0) {
+        if (device_record[i] == 0) { //if device[i] == 0 which means that it is empty in the list 
             device_record[i] = 1;
             return i + LOWEST_ID;
         }
@@ -69,8 +70,25 @@ void adjust_fan(struct cignal *cig) {
  */
 
 int process_message(struct cignal *cig, int *device_record) {
-    
-    // TODO
+    int pt = is_valid_type(cig);
+    if(pt == 1){
+        int device_type = cig->hdr.device_type;
+        float value = cig->value;
+        int device_id = cig->hdr.device_id;
+        
+      
+            if(device_type == 1){//tem
+                printf("Temperature: %.4f --> Device_ID: %d\n", value, device_id);
+            }else{
+                printf("Humidity: %.4f --> Device_ID: %d\n",value, device_id);
+            }
+
+        adjust_fan(cig);//apply adjust
+        printf("********************END EVENT********************\n\n");
+        
+        
+        
+    }
     
     fprintf(stderr, "Received corrupted cignal! The message is discarded...\n");
     return -1;

@@ -31,6 +31,8 @@ void read_humidity(struct cignal *cig) {
 	}
 }
 
+
+
 int main(int argc, char **argv) {
 	int port;
 	char *hostname = "localhost";
@@ -58,8 +60,8 @@ int main(int argc, char **argv) {
 	int msgno = 1;
 	// Suppress unused variable messages.  The next two lines can be removed
 	// before submitting.
-	(void)msgno;
-	(void)cig_serialized;
+	// (void)msgno;
+	// (void)cig_serialized;
 
 
 	while (1) {
@@ -68,6 +70,7 @@ int main(int argc, char **argv) {
 			printf("There was an error in connecting to the gateway!\n");
 			exit(1);
 		} 
+
 		/* TODO: Complete the while loop
 		 * If this is the first message, then send a handshake message with
 		 * a device id of -1.  If it is a subsequent message, then write
@@ -75,7 +78,39 @@ int main(int argc, char **argv) {
 		 * from the server.
 		 */
 
-		// TODO
+		//printf("%s\n", "connect success");
+		//printf("%d   msgno\n", msgno);
+		//1.First Hankshake process
+		if(msgno == 1){
+			cig.hdr.device_id = -1;
+			msgno += 1;
+		}
+		
+		strcpy(cig_serialized,serialize_cignal(cig));
+		cig_serialized[CIGLEN] = '\0';
+		int num_written = write(peerfd, cig_serialized, CIGLEN);
+	
+		if(num_written != CIGLEN){
+		    perror("humidity: write");
+			close(peerfd);
+			exit(1);
+		}
+
+		int num_read = read(peerfd, cig_serialized, CIGLEN);
+		if(num_read < 0){
+			perror("humidity: read");
+			exit(1);
+		}else if(num_read == 0){//server closed the socket
+			 perror("humidity: server cancelled out register");
+			 exit(1);
+		}
+		unpack_cignal(cig_serialized,&cig);
+		read_humidity(&cig);
+
+		strcpy(cig_serialized,serialize_cignal(cig));
+
+		close(peerfd);
+
 
 		if (sleep(INTERVAL) >= 0) {
 			rawtime = time(NULL);

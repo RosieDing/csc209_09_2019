@@ -12,6 +12,53 @@
 
 #define MAXFD(x,y) ((x) >= (y)) ? (x) : (y)
 
+/* Read a message from client_index and echo it back to them.
+ * Return the fd if it has been closed or 0 otherwise.
+ */
+int read_from(int peerfd, char *cig_serialized, struct cignal *cig) {
+    
+    int fd = peerfd;
+    int num_read = read(fd, cig_serialized, CIGLEN);
+    cig_serialized[num_read] = '\0'; 
+
+    if (num_read == 0) {//current fd is closed
+        return fd;
+    }
+
+    //the message sent success!
+
+    printf("RAW MESSAGE: %s\n", cig_serialized);
+    //2. unpacked the char into struct cignal
+    unpack_cignal(cig_serialized, cig);
+
+
+    return 0;
+
+}
+
+
+/* search the client_id */
+int search_client_index(int client_id, int *device_record){
+	if(client_id == -1){
+		for(int i = 0; i < MAXDEV; i++){
+			if(device_record[i] == 0){
+				return i;
+			}
+		}
+	}
+	int pt = is_registered(client_id, device_record);
+	if(pt == 1){
+		for(int i = 0; i < MAXDEV; i++){
+			if(device_record[i] == client_id){
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
+
+
 int main(int argc, char *argv[]){
 	int port;
 	struct cignal cig;
@@ -50,19 +97,94 @@ int main(int argc, char *argv[]){
 	 * 	printf("RAW MESSAGE: %s\n", YOUR_VARIABLE);
 	 */
 
-	// TODO implement select loop
-
 	// Suppress unused variable warning.  The next 5 ilnes can be removed 
 	// after the variables are used.
-	(void)gatewayfd;
-	(void)peerfd;
-	(void)cig;
-	(void)device_record;
-	(void)cig_serialized;
+	// (void)gatewayfd;
+	// (void)peerfd;
+	// (void)cig;
+	// (void)device_record;
+	// (void)cig_serialized;
+
+	int max_fd = gatewayfd;
+	fd_set all_set;
+	FD_ZERO(&all_set);
+	FD_SET(gatewayfd, &all_set);
+
+	struct timeval timeout;
+	timeout.tv_sec = 5;
+	timeout.tv_usec = 0;
+
 
 
 	while(1) {
 
+		//1.firstly select through all the fd available
+		//--make a copy of all fd
+		fd_set copy_all = all_set;
+		//--apply select
+		int nearby = select(max_fd+1, &copy_all, NULL, NULL, &timeout);
+		if(nearby == 0){
+			printf("Waiting for Sensors update...\n");
+		}
+		if(nearby ==-1){
+			perror("gateway: select");
+            exit(1);
+		}
+
+		//2. check user connection --> from listen socket
+		if(FD_ISSET(gatewayfd, &copy_all)){
+			peerfd = accept_connection(gatewayfd);
+			if(peerfd == -1){
+				perror("gateway: accept_connection");
+				exit(1);
+			}
+
+			//new_connect accept success
+			max_fd = MAXFD(peerfd,max_fd);
+			FD_SET(peerfd, &all_set);
+
+
+			int pt = read_from(peerfd, cig_serialized, &cig);
+			if(pt > 0){//the client socket is closed
+			    FD_CLR(pt, &all_set);
+			    perror("gateWay: read failed");
+			    exit(1);
+			}
+		
+
+			int client_id = cig.hdr.device_id;
+
+			//handshake
+			if(client_id == -1){
+				int client_id = register_device(device_record);//new client add to device_record list
+				if(client_id < 0){
+					perror("gateway: register_device");
+					exit(1);
+				}
+				cig.hdr.device_id = client_id;
+				printf("********************END EVENT********************\n\n");
+			}
+			
+			else{
+			    pt = process_message(&cig, device_record);
+			    if(pt < 0){
+			    	perror("process_message");
+			    	exit(1);
+			    }
+			}
+
+			strcpy(cig_serialized,serialize_cignal(cig));
+			cig_serialized[CIGLEN] = '\0';
+			pt = write(peerfd, cig_serialized, CIGLEN);
+			if(pt != CIGLEN){
+				perror("gateway write failed");
+			    exit(1);
+			}
+
+			//FD_CLR(peerfd, &all_set);//finish hand shake-> disconnected!
+		}
+
 	}
+
 	return 0;
 }

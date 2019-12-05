@@ -74,7 +74,35 @@ int main(int argc, char **argv) {
 		 * from the server.
 		 */
 
-		// TODOs
+		//1.First Hankshake process
+		if(msgno == 1){
+			cig.hdr.device_id = -1;
+			msgno += 1;
+		}
+		
+		strcpy(cig_serialized,serialize_cignal(cig));
+		int num_written = write(peerfd, cig_serialized, CIGLEN);
+	
+		if(num_written != CIGLEN){
+		    perror("humidity: write");
+			close(peerfd);
+			exit(1);
+		}
+
+		int num_read = read(peerfd, cig_serialized, CIGLEN);
+		if(num_read < 0){
+			perror("humidity: read");
+			exit(1);
+		}else if(num_read == 0){//server closed the socket
+			 perror("humidity: server cancelled out register");
+			 exit(1);
+		}
+		unpack_cignal(cig_serialized,&cig);
+		read_temperature(&cig);
+
+		strcpy(cig_serialized,serialize_cignal(cig));
+
+		close(peerfd);
 
 		if (sleep(INTERVAL) >= 0) {
 			rawtime = time(NULL);
