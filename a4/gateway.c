@@ -97,9 +97,9 @@ int main(int argc, char *argv[]){
 
 	while(1) {
 
-       struct timeval timeout; //= {5,0};
-	timeout.tv_sec = 5;
-	timeout.tv_usec = 0;
+       struct timeval timeout;
+	   timeout.tv_sec = 5;
+	   timeout.tv_usec = 0;
 
 		//1.firstly select through all the fd available
 		//--make a copy of all fd
@@ -121,56 +121,42 @@ int main(int argc, char *argv[]){
 				perror("gateway: accept_connection");
 				exit(1);
 			}
-
 			//new_connect accept success
-			max_fd = MAXFD(peerfd,max_fd);
+			max_fd = MAXFD(peerfd, max_fd);
 			FD_SET(peerfd, &all_set);
-
-
-			int pt = read_from(peerfd, cig_serialized, &cig);
-			if(pt > 0){//the client socket is closed
-			    FD_CLR(pt, &all_set);
-			    perror("gateWay: read failed");
-			    exit(1);
-			}
-
-			//printf("%s\n", cig_serialized);
-			pt = process_message(&cig, device_record);
-
-			if(pt < 0){
-			    perror("process_message");
-			    exit(1);
-			}
-			
-
-			strcpy(cig_serialized,serialize_cignal(cig));
-			cig_serialized[CIGLEN] = '\0';
-
-			pt = write(peerfd, cig_serialized, CIGLEN);
-			if(pt != CIGLEN){
-				perror("gateway write failed");
-			    exit(1);
-			}
-			 close(peerfd);
-			 FD_CLR(peerfd, &all_set);//finish hand shake-> disconnected!
 		}
 
-		// for (int i = 0; i < max_fd; i++) {
-  //           if (FD_ISSET(i, &copy_all)) {
-  //               int client_closed = read_from(i, cig_serialized, &cig);
-  //               if (client_closed > 0) {
-  //               	close(i);
-  //                   FD_CLR(i, &all_set);
-  //                   printf("Client %d disconnected\n", client_closed);
-  //               } else {
-  //                   printf("Echoing message from client %d\n", i);
-  //               }
-  //           }
-  //       }
+		for (int i = 0; i <= max_fd; i++) {
+            if (FD_ISSET(i, &copy_all) && i != gatewayfd) {
+                int pt = read_from(i, cig_serialized, &cig);
+                if (pt > 0) {
+                	close(i);
+                    FD_CLR(i, &all_set);
+                    //close the fd
+                }
+                else {
+                	pt = process_message(&cig, device_record);
+                	if(pt < 0){
+                		perror("process_message");
+			            exit(1);
+			        }
+			        strcpy(cig_serialized,serialize_cignal(cig));
+			        cig_serialized[CIGLEN] = '\0';
 
-	}
+			        pt = write(peerfd, cig_serialized, CIGLEN);
+			        if(pt != CIGLEN){
+			        	perror("gateway write failed");
+			        	exit(1);
+			        }
+			        close(peerfd);
+			        FD_CLR(peerfd, &all_set);//finish hand shake/conversation-> disconnected!
 
+                }
+            }
+        }
+    }
 
-
-	return 0;
+    return 0;
 }
+
+
