@@ -85,17 +85,17 @@ int main(int argc, char **argv) {
 		int num_written = write(peerfd, cig_serialized, CIGLEN);
 	
 		if(num_written != CIGLEN){
-		    perror("humidity: write");
+		    perror("Temperature: write");
 			close(peerfd);
 			exit(1);
 		}
 
 		int num_read = read(peerfd, cig_serialized, CIGLEN);
 		if(num_read < 0){
-			perror("humidity: read");
+			perror("Temperature: read");
 			exit(1);
 		}else if(num_read == 0){//server closed the socket
-			 perror("humidity: server cancelled out register");
+			 perror("Temperature: server cancelled out register");
 			 exit(1);
 		}
 		unpack_cignal(cig_serialized,&cig);
