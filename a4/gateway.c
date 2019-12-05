@@ -89,13 +89,17 @@ int main(int argc, char *argv[]){
 	FD_ZERO(&all_set);
 	FD_SET(gatewayfd, &all_set);
 
-	struct timeval timeout;
-	timeout.tv_sec = 5;
-	timeout.tv_usec = 0;
+	//struct timeval timeout; //= {5,0};
+	//timeout.tv_sec = 800;
+	//timeout.tv_usec = 0;
 
 	//int device_list[MAXDEV] = {0};
 
 	while(1) {
+
+       struct timeval timeout; //= {5,0};
+	timeout.tv_sec = 5;
+	timeout.tv_usec = 0;
 
 		//1.firstly select through all the fd available
 		//--make a copy of all fd
